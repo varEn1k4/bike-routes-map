@@ -4,13 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карта веломаршрутів</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Шапка з назвою і навігацією -->
-    <!-- Блок карти-заглушки -->
-    <!-- Список маршрутів -->
-    <!-- Блок деталей обраного маршруту -->
-    <!-- Підвал -->
+    <header>
+        <h1>Карта веломаршрутів</h1>
+        <nav>
+            <ul>
+                <li><a href="#map">Карта</a></li>
+                <li><a href="#routes">Маршрути</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id ="map">
+        <h2>Карта</h2>
+        <img src="assets/images/test-image-1.png" alt="Заглушка карти">
+    </section>
+
+    <section id="routes">
+        <h2>Маршрути</h2>
+        <article class="routes">
+            <h3>Маршрут 1</h3>
+            <p>Довжина: 17 км</p>
+            <p>Складність: легка</p>
+        </article>
+
+        <article class="routes">
+            <h3>Маршрут 2</h3>
+            <p>Довжина: 25 км</p>
+            <p>Складність: середня</p>
+        </article>
+    </section>
+
+    <aside id="route-details">
+        <p>Деталі обраного маршруту</p>
+    </aside>
+
+    <footer>
+        <p>2024 Карта веломаршрутів</p>
+    </footer>
      
     <script src="script.js"></script>
 </body>
