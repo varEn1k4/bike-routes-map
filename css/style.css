@@ -8,13 +8,13 @@ body{
     line-height: 1.5;
     color: #333333;   
     background-color: #f4fcf4; 
+    margin: 0;
 }
 
 header{
     background-color: #2e7d32;
     color: white;
     padding: 20px;
-    text-align: center;
 }
 
 header h1{
@@ -27,8 +27,7 @@ header nav ul{
     list-style: none;
     padding: 0;
     margin: 10px 0 0 0;
-    display: flex;
-    justify-content: center;
+    display: inline-block;
 }
 
 header nav ul li{
@@ -95,6 +94,5 @@ footer{
     background-color: #333333;
     color: #aaaaaa;
     font-size: 0.9rem;
-    text-align: center;
     padding: 15px;
 }
