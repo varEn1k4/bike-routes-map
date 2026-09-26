@@ -1,52 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Карта веломаршрутів</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta name="viewport" content="width=device-width" , initial-scale="1.0" />
+  </head>
+  <body>
     <header>
-        <h1>Карта веломаршрутів</h1>
-        <nav>
-            <ul>
-                <li><a href="#map">Карта</a></li>
-                <li><a href="#routes">Маршрути</a></li>
-            </ul>
-        </nav>
+      <h1>Карта веломаршрутів</h1>
+      <nav>
+        <ul>
+          <li><a href="#map">Карта</a></li>
+          <li><a href="#routes">Маршрути</a></li>
+        </ul>
+      </nav>
     </header>
 
     <main>
-    <section id ="map">
+      <section id="map">
         <h2>Карта</h2>
-        <img src="assets/images/test-image-1.png" alt="Схематична карта велосипедних маршрутів Європи">
-    </section>
+        <img
+          src="assets/images/test-image-1.png"
+          alt="Схематична карта велосипедних маршрутів Європи"
+        />
+      </section>
 
-    <section id="routes">
+      <section id="routes">
         <h2>Маршрути</h2>
-        <article class="routes">
+
+        <div class="cards">
+          <article class="routes">
             <h3>Маршрут 1</h3>
             <p>Довжина: 17 км</p>
             <p>Складність: <span class="badge easy">легка</span></p>
-        </article>
+          </article>
 
-        <article class="routes">
+          <article class="routes">
             <h3>Маршрут 2</h3>
             <p>Довжина: 25 км</p>
             <p>Складність: <span class="badge medium">середня</span></p>
-        </article>
-    </section>
+          </article>
+        </div>
+      </section>
 
-    <aside id="route-details">
+      <aside id="route-details">
         <p>Деталі обраного маршруту</p>
-    </aside>
+      </aside>
     </main>
 
     <footer>
-        <p>Авторство: Пазюра Кирило ІП-54</p>
+      <p>Авторство: Пазюра Кирило ІП-54</p>
     </footer>
-     
+
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
