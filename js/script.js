@@ -27,9 +27,11 @@ let totalLength = 0;
 for (let route of routesData) {
   totalLength += route.km;
 
+  // Estimate time in minutes for the current route
   let timeInMinutes = estimateMinutes(route.km);
   let categoryMessage = "";
 
+  // Determine the category message based on difficulty
   if (route.difficulty === "легка") {
     categoryMessage = "Цей маршрут підходить для початківців";
   } else if (route.difficulty === "середня") {
