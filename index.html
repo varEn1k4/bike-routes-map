@@ -31,6 +31,30 @@
       <section id="routes">
         <h2>Маршрути</h2>
 
+        <form id="add-route-form">
+          <div class="form-group">
+            <label for="route-name">Назва маршруту:</label>
+            <input type="text" id="route-name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="route-km">Довжина маршруту (км):</label>
+            <input type="number" id="route-km" required min="0.1" step="any" />
+          </div>
+
+          <div class="form-group">
+            <label for="filter-difficulty">Складність:</label>
+            <select id="filter-difficulty">
+              <option value="всі">всі</option>
+              <option value="легка">легка</option>
+              <option value="середня">середня</option>
+              <option value="складна">складна</option>
+            </select>
+          </div>
+
+          <button type="submit">Додати маршрут</button>
+        </form>
+
         <div class="cards" id="routes-list">
           <article class="routes">
             <h3>Маршрут 1</h3>

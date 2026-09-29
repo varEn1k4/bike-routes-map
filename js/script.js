@@ -16,29 +16,27 @@ const routesData = [
   },
 ];
 
-const estimateMinutes = (km) => Math.round((km / 15) * 60);
-
-let totalLength = 0;
-
-// Use "of" to iterate over the array elements. In this case, 3 times
-for (let route of routesData) {
-  totalLength += route.km;
-
-  // Estimate time in minutes for the current route
-  //let timeInMinutes = estimateMinutes(route.km);
-}
-
-//Code for Task 7
-//Calculate the total length of all static routes int html
+//CONSTANTS FOR TASK 7
 const staticCards = document.querySelectorAll(".routes");
+const listContainer = document.querySelector("#routes-list");
+const totalKmElement = document.querySelector("#total-km");
+//CONSTANTS FOR TASK 8
+const form = document.querySelector("#add-route-form");
+const kmInput = document.querySelector("#route-km");
+const selectedRouteDifficulty = document.querySelector("#filter-difficulty");
+
+//START OF TASK 7
 for (let card of staticCards) {
   card.remove();
 }
-//Searching the element with the id "routes-list"
-const listContainer = document.querySelector("#routes-list");
 
 function renderRoutes(routesData) {
+  listContainer.innerHTML = ""; //Clear the container before rendering new routes
+  let currentTotalLength = 0; //Reset total length for recalculation
+
   for (let element of routesData) {
+    currentTotalLength += element.km;
+
     //Create a new article element for each route
     let route = document.createElement("article");
     route.classList.add("routes");
@@ -65,12 +63,54 @@ function renderRoutes(routesData) {
     route.append(title, details);
     listContainer.append(route);
   }
+
+  if (totalKmElement) {
+    totalKmElement.textContent = `Загальна довжина маршрутів: ${currentTotalLength} км`;
+  }
 }
 
 renderRoutes(routesData);
+//END OF TASK 7
 
-//Calculate the total length of all routes
-const totalKmElement = document.querySelector("#total-km");
-if (totalKmElement) {
-  totalKmElement.textContent = `Загальна довжина маршрутів: ${totalLength} км`;
-}
+//START OF TASK 8
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  let nameInput = document.querySelector("#route-name").value;
+  let kmInput = Number(document.querySelector("#route-km").value);
+  let difficultyInput = document.querySelector("#filter-difficulty").value;
+
+  let newRoute = {
+    name: nameInput,
+    km: kmInput,
+    difficulty: difficultyInput,
+  };
+
+  // Add the new route to the routesData array
+  routesData.push(newRoute);
+  renderRoutes(routesData);
+  form.reset();
+});
+
+//Check if kmInput is bigger than 300
+kmInput.addEventListener("input", () => {
+  if (Number(kmInput.value) > 300) {
+    kmInput.setCustomValidity("Довжина маршруту не може перевищувати 300 км.");
+  } else {
+    kmInput.setCustomValidity("");
+  }
+});
+
+//Filter routes
+selectedRouteDifficulty.addEventListener("change", () => {
+  let selectedOption = selectedRouteDifficulty.value;
+
+  if (selectedOption === "всі") {
+    renderRoutes(routesData);
+  } else {
+    let filteredRoutes = routesData.filter(
+      (route) => route.difficulty === selectedOption,
+    );
+    renderRoutes(filteredRoutes);
+  }
+});
