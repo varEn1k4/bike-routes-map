@@ -24,6 +24,10 @@ const totalKmElement = document.querySelector("#total-km");
 const form = document.querySelector("#add-route-form");
 const kmInput = document.querySelector("#route-km");
 const selectedRouteDifficulty = document.querySelector("#filter-difficulty");
+//CONSTANTS FOR TASK 9
+const API_URL = "https://jsonplaceholder.typicode.com/users";
+const reloadBtn = document.querySelector("#reload-btn");
+const errorMsg = document.querySelector("#error-message");
 
 //START OF TASK 7
 for (let card of staticCards) {
@@ -114,3 +118,59 @@ selectedRouteDifficulty.addEventListener("change", () => {
     renderRoutes(filteredRoutes);
   }
 });
+//END OF TASK 8
+
+//START OF TASK 9
+async function loadData() {
+  try {
+    if (reloadBtn) {
+      //Show loading state
+      reloadBtn.textContent = "Завантаження";
+      reloadBtn.disabled = true;
+    }
+
+    if (errorMsg) {
+      //Clear any previous error messages
+      errorMsg.textContent = "";
+    }
+
+    const response = await fetch(API_URL);
+
+    if (!response.ok) {
+      throw new Error(`${response.status}`);
+    }
+
+    const data = await response.json();
+
+    //Transform the API data into the format required by the render function
+    for (let dataElement of data) {
+      let newApiRoute = {
+        name: dataElement.name + " (" + dataElement.address.city + ")", //From URL
+        km: Math.round(40 * Math.random()),
+        difficulty: "легка",
+      };
+
+      routesData.push(newApiRoute);
+    }
+
+    renderRoutes(routesData);
+  } catch (error) {
+    if (errorMsg) {
+      errorMsg.textContent = "Не вдається завантажити маршрути.";
+    }
+
+    console.error(error);
+  } finally {
+    //Restore the button state
+    if (reloadBtn) {
+      reloadBtn.textContent = "Оновити дані";
+      reloadBtn.disabled = false;
+    }
+  }
+}
+
+if (reloadBtn) {
+  reloadBtn.addEventListener("click", loadData);
+}
+
+loadData();
