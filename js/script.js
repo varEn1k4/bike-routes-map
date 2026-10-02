@@ -142,6 +142,7 @@ async function loadData() {
 
     const data = await response.json();
 
+    routesData.length = 0;
     //Transform the API data into the format required by the render function
     for (let dataElement of data) {
       let newApiRoute = {
@@ -173,4 +174,4 @@ if (reloadBtn) {
   reloadBtn.addEventListener("click", loadData);
 }
 
-loadData();
+//loadData();
