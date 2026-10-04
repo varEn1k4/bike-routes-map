@@ -1,21 +1,3 @@
-const routesData = [
-  {
-    name: "Веломаршрут 1",
-    km: 32,
-    difficulty: "легка",
-  },
-  {
-    name: "Веломаршрут 2",
-    km: 57,
-    difficulty: "середня",
-  },
-  {
-    name: "Веломаршрут 3",
-    km: 86,
-    difficulty: "складна",
-  },
-];
-
 //CONSTANTS FOR TASK 7
 const staticCards = document.querySelectorAll(".routes");
 const listContainer = document.querySelector("#routes-list");
@@ -24,10 +6,138 @@ const totalKmElement = document.querySelector("#total-km");
 const form = document.querySelector("#add-route-form");
 const kmInput = document.querySelector("#route-km");
 const selectedRouteDifficulty = document.querySelector("#filter-difficulty");
-//CONSTANTS FOR TASK 9
-const API_URL = "https://jsonplaceholder.typicode.com/users";
-const reloadBtn = document.querySelector("#reload-btn");
-const errorMsg = document.querySelector("#error-message");
+//Constants for TASK 10
+const DB_NAME = "RoutesDatabase";
+const STORE_NAME = "routes";
+const DB_VERSION = 1;
+
+let routesData = [
+  {
+    id: 1,
+    name: "Веломаршрут 1",
+    km: 32,
+    difficulty: "легка",
+  },
+  {
+    id: 2,
+    name: "Веломаршрут 2",
+    km: 57,
+    difficulty: "середня",
+  },
+  {
+    id: 3,
+    name: "Веломаршрут 3",
+    km: 86,
+    difficulty: "складна",
+  },
+];
+
+//TASK 10 FUNCTIONS
+function saveToLocalStorage(items) {
+  try {
+    localStorage.setItem("routes", JSON.stringify(items));
+  } catch (error) {
+    console.error("Помилка збереження даних у localStorage:", error);
+  }
+}
+
+function loadFromLocalStorage() {
+  try {
+    const storedRoutes = localStorage.getItem("routes");
+    if (storedRoutes) {
+      return JSON.parse(storedRoutes);
+    }
+    return routesData; // Return default data if nothing is stored
+  } catch (error) {
+    console.error("Помилка завантаження даних з localStorage:", error);
+    return routesData;
+  }
+}
+
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: "id" });
+      }
+    };
+
+    request.onsuccess = (event) => resolve(event.target.result);
+
+    request.onerror = (event) => {
+      console.error("IndexedDB недоступна", event.target.error);
+      reject("Помилка відкриття бази даних");
+    };
+  });
+}
+
+async function addItem(item) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.put(item);
+
+    request.onsuccess = () => resolve();
+    request.onerror = (event) => {
+      console.error("IndexedDB недоступна", event.target.error);
+      reject("Помилка відкриття бази даних");
+    };
+  });
+}
+
+async function getAllItems() {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, "readonly");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.getAll();
+
+    request.onsuccess = (event) => resolve(event.target.result);
+    request.onerror = (event) => reject(event.target.error);
+  });
+}
+
+async function deleteItem(id) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, "readwrite");
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.delete(id);
+
+    request.onsuccess = () => resolve();
+    request.onerror = (event) => reject(event.target.error);
+  });
+}
+
+async function migrateIfNeeded() {
+  const isMigrated = localStorage.getItem("migrated");
+  if (isMigrated) return;
+
+  const localData = loadFromLocalStorage();
+  if (localData.length > 0) {
+    for (let route of localData) {
+      await addItem(route);
+    }
+  }
+  localStorage.setItem("migrated", "true");
+}
+
+async function initApp() {
+  try {
+    await migrateIfNeeded();
+    routesData = await getAllItems();
+    renderRoutes(routesData);
+  } catch (error) {
+    console.error("Помилка ініціалізації додатку:", error);
+    alert("Помилка ініціалізації додатку. База даних недоступна.");
+  }
+}
+
+initApp();
 
 //START OF TASK 7
 for (let card of staticCards) {
@@ -72,12 +182,9 @@ function renderRoutes(routesData) {
     totalKmElement.textContent = `Загальна довжина маршрутів: ${currentTotalLength} км`;
   }
 }
-
-renderRoutes(routesData);
 //END OF TASK 7
 
-//START OF TASK 8
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   let nameInput = document.querySelector("#route-name").value;
@@ -85,14 +192,17 @@ form.addEventListener("submit", (event) => {
   let difficultyInput = document.querySelector("#filter-difficulty").value;
 
   let newRoute = {
+    id: Date.now(),
     name: nameInput,
     km: kmInput,
     difficulty: difficultyInput,
   };
 
-  // Add the new route to the routesData array
-  routesData.push(newRoute);
+  await addItem(newRoute);
+
+  routesData = await getAllItems();
   renderRoutes(routesData);
+
   form.reset();
 });
 
@@ -118,60 +228,3 @@ selectedRouteDifficulty.addEventListener("change", () => {
     renderRoutes(filteredRoutes);
   }
 });
-//END OF TASK 8
-
-//START OF TASK 9
-async function loadData() {
-  try {
-    if (reloadBtn) {
-      //Show loading state
-      reloadBtn.textContent = "Завантаження";
-      reloadBtn.disabled = true;
-    }
-
-    if (errorMsg) {
-      //Clear any previous error messages
-      errorMsg.textContent = "";
-    }
-
-    const response = await fetch(API_URL);
-
-    if (!response.ok) {
-      throw new Error(`${response.status}`);
-    }
-
-    const data = await response.json();
-
-    routesData.length = 0;
-    //Transform the API data into the format required by the render function
-    for (let dataElement of data) {
-      let newApiRoute = {
-        name: dataElement.name + " (" + dataElement.address.city + ")", //From URL
-        km: Math.round(40 * Math.random()),
-        difficulty: "легка",
-      };
-
-      routesData.push(newApiRoute);
-    }
-
-    renderRoutes(routesData);
-  } catch (error) {
-    if (errorMsg) {
-      errorMsg.textContent = "Не вдається завантажити маршрути.";
-    }
-
-    console.error(error);
-  } finally {
-    //Restore the button state
-    if (reloadBtn) {
-      reloadBtn.textContent = "Оновити дані";
-      reloadBtn.disabled = false;
-    }
-  }
-}
-
-if (reloadBtn) {
-  reloadBtn.addEventListener("click", loadData);
-}
-
-//loadData();
