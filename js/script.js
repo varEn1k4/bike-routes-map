@@ -15,19 +15,19 @@ let routesData = [
   {
     id: 1,
     name: "Веломаршрут 1",
-    km: 32,
+    distanceKm: 32,
     difficulty: "легка",
   },
   {
     id: 2,
     name: "Веломаршрут 2",
-    km: 57,
+    distanceKm: 57,
     difficulty: "середня",
   },
   {
     id: 3,
     name: "Веломаршрут 3",
-    km: 86,
+    distanceKm: 86,
     difficulty: "складна",
   },
 ];
@@ -149,7 +149,7 @@ function renderRoutes(routesData) {
   let currentTotalLength = 0; //Reset total length for recalculation
 
   for (let element of routesData) {
-    currentTotalLength += element.km;
+    currentTotalLength += element.distanceKm;
 
     //Create a new article element for each route
     let route = document.createElement("article");
@@ -160,10 +160,10 @@ function renderRoutes(routesData) {
     title.textContent = element.name;
 
     let details = document.createElement("p");
-    details.textContent = `${element.km} км, ${element.difficulty}`;
+    details.textContent = `${element.distanceKm} км, ${element.difficulty}`;
 
     //Set the data-km attribute for each route
-    route.dataset.km = element.km;
+    route.dataset.km = element.distanceKm;
 
     if (element.difficulty === "легка") {
       route.classList.add("easy");
@@ -194,9 +194,12 @@ form.addEventListener("submit", async (event) => {
   let newRoute = {
     id: Date.now(),
     name: nameInput,
-    km: kmInput,
+    distanceKm: kmInput,
     difficulty: difficultyInput,
   };
+
+  routesData.push(newRoute);
+  saveToLocalStorage(routesData);
 
   await addItem(newRoute);
 
