@@ -1,25 +1,13 @@
-const routesData = [
-  {
-    name: "Веломаршрут 1",
-    km: 32,
-    difficulty: "легка",
-  },
-  {
-    name: "Веломаршрут 2",
-    km: 57,
-    difficulty: "середня",
-  },
-  {
-    name: "Веломаршрут 3",
-    km: 86,
-    difficulty: "складна",
-  },
-];
-//START OF TASK 10
+//Я обрав Vue 3, оскільки він має більш низький поріг входження для новачків,
+// а також синтаксис у нього для мене більш зрозумілий
 const app = Vue.createApp({
   data() {
     return {
-      routesData: routesData,
+      routesData: [
+        { name: "Веломаршрут 1", lengthKm: 32, difficulty: "легка" },
+        { name: "Веломаршрут 2", lengthKm: 57, difficulty: "середня" },
+        { name: "Веломаршрут 3", lengthKm: 86, difficulty: "складна" },
+      ],
     };
   },
   methods: {
