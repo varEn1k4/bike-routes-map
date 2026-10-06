@@ -10,6 +10,9 @@ const selectedRouteDifficulty = document.querySelector("#filter-difficulty");
 const DB_NAME = "RoutesDatabase";
 const STORE_NAME = "routes";
 const DB_VERSION = 1;
+//CONSTANTS FOR TASK 12
+const canvas = document.querySelector("#routes-chart");
+const ctx = canvas.getContext("2d");
 
 let routesData = [
   {
@@ -32,7 +35,7 @@ let routesData = [
   },
 ];
 
-//TASK 10 FUNCTIONS
+//TASK 11 FUNCTIONS
 function saveToLocalStorage(items) {
   try {
     localStorage.setItem("routes", JSON.stringify(items));
@@ -153,6 +156,16 @@ function renderRoutes(routesData) {
 
     //Create a new article element for each route
     let route = document.createElement("article");
+
+    let detailsButton = document.createElement("button");
+    detailsButton.classList.add("show-details-btn");
+    detailsButton.type = "button";
+    detailsButton.textContent = "Показати перепад висот";
+    detailsButton.addEventListener("click", () => {
+      animateRoute(element);
+    });
+    route.append(detailsButton);
+
     route.classList.add("routes");
 
     //Create and append the title and details for each route
@@ -174,7 +187,7 @@ function renderRoutes(routesData) {
     }
 
     //Append the title and details to the route article
-    route.append(title, details);
+    route.append(title, details, detailsButton);
     listContainer.append(route);
   }
 
@@ -231,3 +244,65 @@ selectedRouteDifficulty.addEventListener("change", () => {
     renderRoutes(filteredRoutes);
   }
 });
+
+//TASK 12
+
+//Function to create high points based on route distance and difficulty
+function createHighPoints(route) {
+  let pointsCount = Math.floor(route.distanceKm / 4);
+
+  if (pointsCount < 2) {
+    pointsCount = 2;
+  }
+
+  let maxHeight = 0;
+  if (route.difficulty === "легка") {
+    maxHeight = 30;
+  } else if (route.difficulty === "середня") {
+    maxHeight = 80;
+  } else if (route.difficulty === "складна") {
+    maxHeight = 140;
+  }
+
+  let highPoint = [];
+  for (let i = 0; i < pointsCount; i++) {
+    highPoint.push(Math.floor(Math.random() * maxHeight) + 1);
+  }
+  return highPoint;
+}
+
+let animationFrameId;
+//Function to animate the route on the canvas
+function animateRoute(route) {
+  const highPoints = createHighPoints(route);
+  let currentPoint = 1;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  //Function to draw the frame of the animation
+  function drawFrame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height - highPoints[0]);
+    //Draw lines to each high point
+    for (let i = 1; i <= currentPoint; i++) {
+      let x = (canvas.width / (highPoints.length - 1)) * i;
+      let y = canvas.height - highPoints[i];
+      ctx.lineTo(x, y);
+    }
+
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    //If there are more points to draw, request the next animation frame
+    if (currentPoint < highPoints.length - 1) {
+      currentPoint++;
+      animationFrameId = requestAnimationFrame(drawFrame);
+    }
+  }
+  //If there is an existing animation frame, cancel it before starting a new one
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+  }
+
+  drawFrame();
+}
