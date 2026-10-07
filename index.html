@@ -13,82 +13,15 @@
       <h1>Карта веломаршрутів</h1>
       <nav>
         <ul>
-          <li><a href="#map">Карта</a></li>
-          <li><a href="#routes">Маршрути</a></li>
+          <li><a href="#/" data-link>Головна (всі маршрути)</a></li>
+          <li><a href="#/difficulty/легка" data-link>Легкі маршрути</a></li>
+          <li><a href="#/difficulty/середня" data-link>Середні</a></li>
+          <li><a href="#/difficulty/складна" data-link>Складні</a></li>
         </ul>
       </nav>
     </header>
 
-    <main>
-      <section id="map">
-        <h2>Карта</h2>
-        <img
-          src="assets/images/test-image-1.png"
-          alt="Схематична карта велосипедних маршрутів Європи"
-        />
-      </section>
-
-      <section id="routes">
-        <h2>Маршрути</h2>
-
-        <form id="add-route-form">
-          <div class="form-group">
-            <label for="route-name">Назва маршруту:</label>
-            <input type="text" id="route-name" required />
-          </div>
-
-          <div class="form-group">
-            <label for="route-km">Довжина маршруту (км):</label>
-            <input type="number" id="route-km" required min="0.1" step="any" />
-          </div>
-
-          <div class="form-group">
-            <label for="filter-difficulty">Складність:</label>
-            <select id="filter-difficulty">
-              <option value="всі">всі</option>
-              <option value="легка">легка</option>
-              <option value="середня">середня</option>
-              <option value="складна">складна</option>
-            </select>
-          </div>
-
-          <button type="submit">Додати маршрут</button>
-        </form>
-
-        <div class="api-controls" style="margin-bottom: 20px">
-          <button type="button" id="reload-btn">Оновити дані</button>
-          <p id="error-message" style="color: red; font-weight: bold"></p>
-        </div>
-
-        <canvas id="routes-chart" width="400" height="200"></canvas>
-
-        <div class="cards" id="routes-list">
-          <article class="routes">
-            <h3>Маршрут 1</h3>
-            <p>Довжина: <span class="distance-value">32 км</span></p>
-            <p>Складність: <span class="badge easy">легка</span></p>
-          </article>
-
-          <article class="routes">
-            <h3>Маршрут 2</h3>
-            <p>Довжина: <span class="distance-value">57 км</span></p>
-            <p>Складність: <span class="badge medium">середня</span></p>
-          </article>
-
-          <article class="routes">
-            <h3>Маршрут 3</h3>
-            <p>Довжина: <span class="distance-value">86 км</span></p>
-            <p>Складність: <span class="badge hard">складна</span></p>
-          </article>
-        </div>
-
-        <p id="total-km"></p>
-      </section>
-
-      <aside id="route-details">
-        <p>Деталі обраного маршруту</p>
-      </aside>
-    </main>
+    <main id="app"></main>
 
     <footer>
       <p>Авторство: Пазюра Кирило ІП-54</p>
