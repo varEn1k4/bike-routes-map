@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Веломаршрут 1",
+    "distanceKm": 32,
+    "difficulty": "легка"
+  },
+  {
+    "id": 2,
+    "name": "Веломаршрут 2",
+    "distanceKm": 57,
+    "difficulty": "середня"
+  },
+  {
+    "id": 3,
+    "name": "Веломаршрут 3",
+    "distanceKm": 86,
+    "difficulty": "складна"
+  },
+  {
+    "id": 4,
+    "name": "Веломаршрут 4",
+    "distanceKm": 15,
+    "difficulty": "легка"
+  },
+  {
+    "id": 5,
+    "name": "Веломаршрут 5",
+    "distanceKm": 45,
+    "difficulty": "середня"
+  },
+  {
+    "id": 6,
+    "name": "Веломаршрут 6",
+    "distanceKm": 120,
+    "difficulty": "складна"
+  },
+  {
+    "id": 7,
+    "name": "Веломаршрут 7",
+    "distanceKm": 24,
+    "difficulty": "легка"
+  },
+  {
+    "id": 8,
+    "name": "Веломаршрут 8",
+    "distanceKm": 62,
+    "difficulty": "середня"
+  }
+]

@@ -138,12 +138,20 @@ async function migrateIfNeeded() {
 
 async function initApp() {
   try {
-    await migrateIfNeeded();
-    routesData = await getAllItems();
+    //Load data from server first, if available
+    const apiRoutes = await fetchRoutesFromServer();
+    // If server data is available, use it; otherwise, migrate from localStorage
+    if (apiRoutes.length > 0) {
+      routesData = apiRoutes;
+    } else {
+      await migrateIfNeeded();
+      routesData = await getAllItems();
+    }
+
     router();
   } catch (error) {
     console.error("Помилка ініціалізації додатку:", error);
-    alert("Помилка ініціалізації додатку. База даних недоступна.");
+    router(); //Render the app even if there's an error, using whatever data is available
   }
 }
 
@@ -427,3 +435,17 @@ function router() {
 }
 
 window.addEventListener("hashchange", router);
+
+// TASK 14
+async function fetchRoutesFromServer() {
+  try {
+    const response = await fetch("http://localhost:3000/api/routes");
+    if (!response.ok) {
+      throw new Error("Помилка при отриманні даних з сервера");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Не вдалося отримати дані:", error);
+    return [];
+  }
+}
