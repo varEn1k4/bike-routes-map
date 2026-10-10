@@ -321,6 +321,13 @@ function renderHomePage() {
     let kmInputValue = Number(kmInput.value);
     let difficultyInput = selectedRouteDifficulty.value;
 
+    if (difficultyInput === "всі") {
+      alert(
+        "Будь ласка, оберіть конкретну складність для нового маршруту (легка, середня або складна).",
+      );
+      return;
+    }
+
     let newRoute = {
       id: Date.now(),
       name: nameInput,
@@ -356,20 +363,26 @@ function renderRouteDetailsPage(id) {
     renderNotFoundPage();
     return;
   }
-
-  appContainer.innerHTML = `
+  //
+  appContainer.innerHTML = ` 
     <section id="route-details-page">
       <h2>Деталі маршруту</h2>
-      <p>ID: ${id}</p>
-      <p>Назва: ${route.name}</p>
-      <p>Довжина: ${route.distanceKm} км</p>
-      <p>Складність: ${route.difficulty}</p>
+      <p id="check-id"></p>
+      <p id="check-name"></p>
+      <p id="check-distanceKm"></p>
+      <p id="check-difficulty"></p>
 
       <canvas id="routes-chart" width="400" height="200"></canvas>
       
       <button type="button" onclick="window.history.back()">Назад до списку</button>
     </section>
   `;
+  document.getElementById("check-id").textContent = `ID: ${id}`;
+  document.getElementById("check-name").textContent = `Назва: ${route.name}`;
+  document.getElementById("check-distanceKm").textContent =
+    `Довжина: ${route.distanceKm} км`;
+  document.getElementById("check-difficulty").textContent =
+    `Складність: ${route.difficulty}`;
 
   animateRoute(route);
 }
@@ -382,7 +395,6 @@ function renderFilteredRoutesPage(difficulty) {
       <h2>Маршрути складності: ${difficulty}</h2>
       <button type="button" onclick="window.history.back()" style="margin-bottom: 20px;">← Назад до списку</button>
       
-      <!-- Контейнер для карток -->
       <div id="routes-list" style="display:flex; flex-direction:column; gap:10px;"></div>
       <p id="total-km"></p>
     </section>
