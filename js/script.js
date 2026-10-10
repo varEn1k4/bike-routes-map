@@ -322,9 +322,7 @@ function renderHomePage() {
     let difficultyInput = selectedRouteDifficulty.value;
 
     if (difficultyInput === "всі") {
-      alert(
-        "Будь ласка, оберіть конкретну складність для нового маршруту (легка, середня або складна).",
-      );
+      alert("Будь ласка, оберіть конкретну складність для нового маршруту.");
       return;
     }
 
@@ -392,18 +390,22 @@ function renderFilteredRoutesPage(difficulty) {
   );
   appContainer.innerHTML = `
     <section id="filtered-routes-page">
-      <h2>Маршрути складності: ${difficulty}</h2>
+      <h2 id="check-difficulty"></h2>
       <button type="button" onclick="window.history.back()" style="margin-bottom: 20px;">← Назад до списку</button>
       
       <div id="routes-list" style="display:flex; flex-direction:column; gap:10px;"></div>
       <p id="total-km"></p>
     </section>
   `;
+
+  document.getElementById("check-difficulty").textContent =
+    `Маршрути складності: ${difficulty}`;
+
   if (filteredRoutes.length > 0) {
     renderRoutes(filteredRoutes);
   } else {
-    document.querySelector("#routes-list").innerHTML =
-      "<p>Маршрути не знайдені.</p>";
+    document.querySelector("#routes-list").textContent =
+      "Маршрути не знайдені.";
   }
 }
 
